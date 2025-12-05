@@ -1,20 +1,41 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const NervLayout = ({ children }) => {
+const NervLayout = ({ children, theme }) => {
+    // Update CSS variables when theme changes
+    useEffect(() => {
+        if (theme) {
+            document.documentElement.style.setProperty('--theme-primary', theme.primary || '#ff9d00');
+            document.documentElement.style.setProperty('--theme-secondary', theme.secondary || '#e60000');
+            document.documentElement.style.setProperty('--theme-accent', theme.accent || '#39ff14');
+            document.documentElement.style.setProperty('--grid-color', theme.primary ? `${theme.primary}20` : 'rgba(255, 157, 0, 0.15)');
+        }
+    }, [theme]);
+
+    // Dynamic Grid Background
+    const gridStyle = {
+        backgroundImage: `
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px)
+      `,
+        backgroundSize: '40px 40px',
+    };
+
     return (
-        <div style={{
-            width: '100vw',
-            height: '100vh',
-            position: 'relative',
-            overflow: 'hidden',
-            padding: '40px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center'
-        }}>
-            {/* Background Grids are handled by CSS/Body, but we can add specific UI chrome here */}
+        <div
+            style={{
+                ...gridStyle,
+                width: '100vw',
+                height: '100vh',
+                position: 'relative',
+                overflow: 'hidden',
+                padding: '40px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}
+        >
 
             {/* Top Left System Status */}
             <motion.div
@@ -23,7 +44,7 @@ const NervLayout = ({ children }) => {
                 transition={{ duration: 0.8 }}
                 style={{ position: 'absolute', top: 30, left: 30 }}
             >
-                <div className="nerv-border" style={{ padding: '5px 15px', color: 'var(--nerv-orange)' }}>
+                <div className="nerv-border" style={{ padding: '5px 15px', color: 'var(--theme-primary)', borderColor: 'var(--theme-primary)' }}>
                     <h4 style={{ margin: 0, letterSpacing: '2px' }}>MAGI-01: MELCHIOR</h4>
                     <small style={{ fontSize: '0.6rem' }}>STATUS: ONLINE</small>
                 </div>
@@ -36,28 +57,28 @@ const NervLayout = ({ children }) => {
                 transition={{ duration: 0.8 }}
                 style={{ position: 'absolute', top: 30, right: 30, textAlign: 'right' }}
             >
-                <div className="text-alert" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--theme-secondary)' }}>
                     INTERNAL POWER
                 </div>
-                <div style={{ color: 'var(--nerv-orange)', fontSize: '0.8rem' }}>
+                <div style={{ color: 'var(--theme-primary)', fontSize: '0.8rem' }}>
                     T-MINUS: <span style={{ fontFamily: 'var(--font-display)' }}>05:00:00</span>
                 </div>
-            </motion.div>
-
-            {/* Bottom Footer Area */}
-            <motion.div
-                initial={{ y: 50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                style={{ position: 'absolute', bottom: 30, width: '100%', textAlign: 'center', color: 'var(--nerv-dark-grey)' }}
-            >
-                <p style={{ fontSize: '0.7rem', letterSpacing: '1px' }}>GOD IS IN HIS HEAVEN. ALL'S RIGHT WITH THE WORLD.</p>
             </motion.div>
 
             {/* Main Content Area */}
             <div style={{ zIndex: 1, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {children}
             </div>
+
+            {/* Bottom Footer Area */}
+            <motion.div
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+                style={{ position: 'absolute', bottom: 30, width: '100%', textAlign: 'center', color: '#444' }}
+            >
+                <p style={{ fontSize: '0.7rem', letterSpacing: '1px' }}>GOD IS IN HIS HEAVEN. ALL'S RIGHT WITH THE WORLD.</p>
+            </motion.div>
         </div>
     );
 };

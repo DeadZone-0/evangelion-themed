@@ -1,123 +1,91 @@
-```javascript
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import NervLayout from './components/NervLayout';
 import HexagonMenu from './components/HexagonMenu';
-import StatusMonitor from './components/StatusMonitor';
 import BootSequence from './components/BootSequence';
+import CharacterSelect from './pages/CharacterSelect';
+import CharacterDetail from './pages/CharacterDetail';
+import { DEFAULT_THEME } from './data/characters';
 
-function App() {
-  const [booted, setBooted] = useState(false);
-  const menuItems = ['HOME', 'PROJECTS', 'ARCHIVE', 'LOGS'];
-  const [activeIndex, setActiveIndex] = useState(0);
-  const activeTab = menuItems[activeIndex];
-
-  if (!booted) {
-      return <BootSequence onComplete={() => setBooted(true)} />;
-  }
-
-  const renderContent = () => {
-      switch(activeTab) {
-          case 'PROJECTS':
-              return (
-                  <div>
-                      <h4>// ACTIVE_PROJECTS</h4>
-                      <ul style={{ listStyle: 'none', padding: 0 }}>
-                          {['EVA-00 Prototype', 'EVA-01 Test Type', 'EVA-02 Production Model'].map(item => (
-                              <li key={item} style={{ borderBottom: '1px dashed #444', padding: '10px 0', color: 'var(--nerv-green)' }}>
-                                  > {item} [DEPLOYED]
-                              </li>
-                          ))}
-                      </ul>
-                  </div>
-              );
-          case 'ARCHIVE':
-              return (
-                  <div>
-                      <h4>// CLASSIFIED_DATA</h4>
-                      <p style={{ color: 'var(--nerv-red)' }}>ACCESS DENIED. CLEARANCE LEVEL: COMMANDER REQUIRED.</p>
-                      <div style={{ marginTop: '20px', fontSize: '0.8rem', opacity: 0.7 }}>
-                          Attempting bypass... Failed.
-                      </div>
-                  </div>
-              );
-          default:
-              return (
-                  <>
-                    <p style={{ lineHeight: '1.6', fontSize: '0.9rem', color: '#ccc' }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                        Target confirmation: Blue. Pattern matches Angel content.
-                    </p>
-                    <br/>
-                    <p style={{ lineHeight: '1.6', fontSize: '0.9rem', color: '#ccc' }}>
-                        System synchronisation ratio currently at 400%. 
-                    </p>
-                  </>
-              );
-      }
-  };
-
+// Home Component to keep the landing page logic separate
+const Home = () => {
   return (
-    <NervLayout>
+    <>
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1 }}
         style={{ marginBottom: '40px', textAlign: 'center' }}
       >
-        <h1 style={{ 
-          fontFamily: 'var(--font-display)', 
-          fontSize: '5rem', 
+        <h1 style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '5rem',
           margin: 0,
-          color: 'var(--nerv-orange)',
-          textShadow: '0 0 15px var(--nerv-orange)'
+          color: 'var(--theme-primary)',
+          textShadow: '0 0 15px var(--theme-primary)'
         }}>
           NERV
         </h1>
-        <div style={{ letterSpacing: '8px', color: 'var(--nerv-red)', fontWeight: 'bold' }}>
+        <div style={{ letterSpacing: '8px', color: 'var(--theme-secondary)', fontWeight: 'bold' }}>
           SPECIAL AGENCY
         </div>
       </motion.div>
+      <div style={{ marginTop: '50px', border: '1px solid var(--theme-primary)', padding: '20px' }}>
+        AWAITING COMMAND INSTRUCTIONS...
+      </div>
+    </>
+  )
+}
 
+function AppContent() {
+  const [booted, setBooted] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState(DEFAULT_THEME);
+  const navigate = useNavigate();
+
+  // Navigation logic mapping
+  const handleMenuSelect = (index) => {
+    const items = ['HOME', 'CHARACTERS', 'ARCHIVE', 'LOGS'];
+    const item = items[index];
+    if (item === 'HOME') {
+      setCurrentTheme(DEFAULT_THEME); // Reset theme on home
+      navigate('/');
+    } else if (item === 'CHARACTERS') {
+      setCurrentTheme(DEFAULT_THEME);
+      navigate('/characters');
+    }
+    // Add other routes as needed
+  };
+
+  if (!booted) {
+    return <BootSequence onComplete={() => setBooted(true)} />;
+  }
+
+  return (
+    <NervLayout theme={currentTheme}>
       <div style={{ marginBottom: '50px' }}>
-         <HexagonMenu 
-            items={menuItems} 
-            activeIndex={activeIndex}
-            onSelect={setActiveIndex}
-         />
+        <HexagonMenu
+          items={['HOME', 'CHARACTERS', 'ARCHIVE', 'LOGS']}
+          activeIndex={-1} // Highlight logic needs state, simplified for now
+          onSelect={handleMenuSelect}
+        />
       </div>
 
-      {/* Main Display Area */}
-      <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', justifyContent: 'center', width: '80%', maxWidth: '1000px' }}>
-          
-          <StatusMonitor />
-          
-          <motion.div 
-            key={activeTab} // Triggers animation on change
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-            className="nerv-border"
-            style={{ 
-              flex: 1, 
-              minHeight: '300px', 
-              padding: '20px', 
-              backgroundColor: 'rgba(0,0,0,0.8)',
-              overflowY: 'auto'
-            }}
-          >
-            <h3 style={{ borderBottom: '1px solid var(--nerv-orange)', paddingBottom: '10px', marginBottom: '15px' }}>
-              // DATA_OUTPUT: {activeTab}
-            </h3>
-            {renderContent()}
-          </motion.div>
-
-      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/characters" element={<CharacterSelect />} />
+        <Route path="/character/:id" element={<CharacterDetail setTheme={setCurrentTheme} />} />
+      </Routes>
     </NervLayout>
   )
 }
 
-export default App;
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  );
+}
 
-```
+export default App;

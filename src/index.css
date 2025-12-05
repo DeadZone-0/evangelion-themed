@@ -1,99 +1,73 @@
-:root {
-    --nerv-orange: #ff9d00;
-    --nerv-orange-dim: #cc7d00;
-    --nerv-red: #e60000;
-    --nerv-green: #39ff14;
-    --nerv-black: #050505;
-    --nerv-dark-grey: #1a1a1a;
-    --scanline-color: rgba(0, 0, 0, 0.5);
-    --grid-color: rgba(255, 157, 0, 0.15);
-
-    --font-main: 'Rajdhani', sans-serif;
-    --font-display: 'Orbitron', sans-serif;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    cursor: crosshair;
-    /* Tactical cursor */
-}
-
-body {
-    background-color: var(--nerv-black);
-    color: var(--nerv-orange);
-    font-family: var(--font-main);
     overflow: hidden;
     /* App-like feel */
     height: 100vh;
     width: 100vw;
-}
-
-/* CRT Scanline Effect Overlay */
-body::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: repeating-linear-gradient(0deg,
-            rgba(0, 0, 0, 0.15),
-            rgba(0, 0, 0, 0.15) 1px,
-            transparent 1px,
-            transparent 2px);
-    pointer-events: none;
-    z-index: 9999;
-}
-
-/* Subtle flickers/glitch animation keyframes can be added here */
-@keyframes flicker {
-    0% {
-        opacity: 0.97;
     }
 
-    5% {
-        opacity: 0.9;
+    /* CRT Scanline Effect Overlay */
+    body::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: repeating-linear-gradient(0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px);
+        pointer-events: none;
+        z-index: 9999;
     }
 
-    10% {
-        opacity: 0.97;
+    /* Subtle flickers/glitch animation keyframes can be added here */
+    @keyframes flicker {
+        0% {
+            opacity: 0.97;
+        }
+
+        5% {
+            opacity: 0.9;
+        }
+
+        10% {
+            opacity: 0.97;
+        }
+
+        15% {
+            opacity: 1;
+        }
+
+        20% {
+            opacity: 0.95;
+        }
+
+        100% {
+            opacity: 0.97;
+        }
     }
 
-    15% {
-        opacity: 1;
+    #root {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        animation: flicker 4s infinite;
     }
 
-    20% {
-        opacity: 0.95;
+    /* Utility classes for NERV UI */
+    .nerv-border {
+        border: 2px solid var(--nerv-orange);
+        box-shadow: 0 0 10px var(--nerv-orange);
+        background: rgba(0, 0, 0, 0.8);
     }
 
-    100% {
-        opacity: 0.97;
+    .text-glow {
+        text-shadow: 0 0 5px var(--nerv-orange), 0 0 10px var(--nerv-orange);
     }
-}
 
-#root {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    animation: flicker 4s infinite;
-}
-
-/* Utility classes for NERV UI */
-.nerv-border {
-    border: 2px solid var(--nerv-orange);
-    box-shadow: 0 0 10px var(--nerv-orange);
-    background: rgba(0, 0, 0, 0.8);
-}
-
-.text-glow {
-    text-shadow: 0 0 5px var(--nerv-orange), 0 0 10px var(--nerv-orange);
-}
-
-.text-alert {
-    color: var(--nerv-red);
-    text-shadow: 0 0 5px var(--nerv-red), 0 0 10px var(--nerv-red);
-}
+    .text-alert {
+        color: var(--nerv-red);
+        text-shadow: 0 0 5px var(--nerv-red), 0 0 10px var(--nerv-red);
+    }
