@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
+import { playHoverSound, playClickSound } from '../utils/sound';
 
 const Hexagon = ({ label, delay, onClick, active }) => {
     return (
@@ -8,7 +9,11 @@ const Hexagon = ({ label, delay, onClick, active }) => {
             animate={{ scale: 1, rotate: 0 }}
             transition={{ delay: delay * 0.1, type: 'spring', stiffness: 260, damping: 20 }}
             whileHover={{ scale: 1.1, zIndex: 10 }}
-            onClick={onClick}
+            onHoverStart={() => playHoverSound()}
+            onClick={() => {
+                playClickSound();
+                onClick();
+            }}
             style={{
                 width: '100px',
                 height: '115px',
@@ -39,9 +44,7 @@ const Hexagon = ({ label, delay, onClick, active }) => {
     );
 };
 
-const HexagonMenu = ({ items = ['HOME', 'SYSTEM', 'DATA', 'LOGS', 'CONTACT'] }) => {
-    const [activeIndex, setActiveIndex] = useState(0);
-
+const HexagonMenu = ({ items, activeIndex, onSelect }) => {
     return (
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
             {items.map((item, index) => (
@@ -50,7 +53,7 @@ const HexagonMenu = ({ items = ['HOME', 'SYSTEM', 'DATA', 'LOGS', 'CONTACT'] }) 
                     label={item}
                     delay={index}
                     active={index === activeIndex}
-                    onClick={() => setActiveIndex(index)}
+                    onClick={() => onSelect(index)}
                 />
             ))}
         </div>
