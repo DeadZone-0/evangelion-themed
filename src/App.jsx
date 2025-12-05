@@ -4,11 +4,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import NervLayout from './components/NervLayout';
 import HexagonMenu from './components/HexagonMenu';
 import StatusMonitor from './components/StatusMonitor';
+import BootSequence from './components/BootSequence';
 
 function App() {
+  const [booted, setBooted] = useState(false);
   const menuItems = ['HOME', 'PROJECTS', 'ARCHIVE', 'LOGS'];
   const [activeIndex, setActiveIndex] = useState(0);
   const activeTab = menuItems[activeIndex];
+
+  if (!booted) {
+      return <BootSequence onComplete={() => setBooted(true)} />;
+  }
 
   const renderContent = () => {
       switch(activeTab) {
