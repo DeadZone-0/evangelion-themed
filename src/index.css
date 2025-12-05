@@ -1,73 +1,107 @@
+:root {
+    /* Default NERV Theme (Magma/Orange) in HSL */
+    --theme-hue: 37;
+    --theme-sat: 100%;
+    --theme-light: 50%;
+
+    --theme-sec-hue: 0;
+    --theme-sec-sat: 100%;
+    --theme-sec-light: 45%;
+
+    --theme-acc-hue: 110;
+    --theme-acc-sat: 100%;
+    --theme-acc-light: 54%;
+
+    --theme-primary: hsl(var(--theme-hue), var(--theme-sat), var(--theme-light));
+    --theme-secondary: hsl(var(--theme-sec-hue), var(--theme-sec-sat), var(--theme-sec-light));
+    --theme-accent: hsl(var(--theme-acc-hue), var(--theme-acc-sat), var(--theme-acc-light));
+
+    --nerv-black: #050505;
+    --font-main: 'Rajdhani', sans-serif;
+    --font-display: 'Orbitron', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    cursor: crosshair;
+    transition: color 0.5s ease, border-color 0.5s ease, background-color 0.5s ease, box-shadow 0.5s ease, text-shadow 0.5s ease;
+}
+
+body {
+    background-color: var(--nerv-black);
+    color: var(--theme-primary);
+    font-family: var(--font-main);
     overflow: hidden;
-    /* App-like feel */
     height: 100vh;
     width: 100vw;
+}
+
+/* CRT Scanline Effect Overlay */
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: repeating-linear-gradient(0deg,
+            rgba(0, 0, 0, 0.15),
+            rgba(0, 0, 0, 0.15) 1px,
+            transparent 1px,
+            transparent 2px);
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.nerv-border {
+    border: 2px solid var(--theme-primary);
+    box-shadow: 0 0 15px hsla(var(--theme-hue), var(--theme-sat), var(--theme-light), 0.5);
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(2px);
+}
+
+.neon-text {
+    text-shadow: 0 0 10px hsla(var(--theme-hue), var(--theme-sat), var(--theme-light), 0.8),
+        0 0 20px hsla(var(--theme-hue), var(--theme-sat), var(--theme-light), 0.5);
+}
+
+.neon-border {
+    box-shadow: 0 0 10px hsla(var(--theme-hue), var(--theme-sat), var(--theme-light), 0.8),
+        inset 0 0 20px hsla(var(--theme-hue), var(--theme-sat), var(--theme-light), 0.2);
+}
+
+@keyframes flicker {
+    0% {
+        opacity: 0.97;
     }
 
-    /* CRT Scanline Effect Overlay */
-    body::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: repeating-linear-gradient(0deg,
-                rgba(0, 0, 0, 0.15),
-                rgba(0, 0, 0, 0.15) 1px,
-                transparent 1px,
-                transparent 2px);
-        pointer-events: none;
-        z-index: 9999;
+    5% {
+        opacity: 0.9;
     }
 
-    /* Subtle flickers/glitch animation keyframes can be added here */
-    @keyframes flicker {
-        0% {
-            opacity: 0.97;
-        }
-
-        5% {
-            opacity: 0.9;
-        }
-
-        10% {
-            opacity: 0.97;
-        }
-
-        15% {
-            opacity: 1;
-        }
-
-        20% {
-            opacity: 0.95;
-        }
-
-        100% {
-            opacity: 0.97;
-        }
+    10% {
+        opacity: 0.97;
     }
 
-    #root {
-        height: 100%;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        animation: flicker 4s infinite;
+    15% {
+        opacity: 1;
     }
 
-    /* Utility classes for NERV UI */
-    .nerv-border {
-        border: 2px solid var(--nerv-orange);
-        box-shadow: 0 0 10px var(--nerv-orange);
-        background: rgba(0, 0, 0, 0.8);
+    20% {
+        opacity: 0.95;
     }
 
-    .text-glow {
-        text-shadow: 0 0 5px var(--nerv-orange), 0 0 10px var(--nerv-orange);
+    100% {
+        opacity: 0.97;
     }
+}
 
-    .text-alert {
-        color: var(--nerv-red);
-        text-shadow: 0 0 5px var(--nerv-red), 0 0 10px var(--nerv-red);
-    }
+#root {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    animation: flicker 4s infinite;
+}

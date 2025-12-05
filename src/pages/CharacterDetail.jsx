@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CHARACTERS } from '../data/characters';
+import SynchroGraph from '../components/SynchroGraph';
 
 const CharacterDetail = ({ setTheme }) => {
     const { id } = useParams();
@@ -12,12 +13,12 @@ const CharacterDetail = ({ setTheme }) => {
         if (character && setTheme) {
             setTheme(character.colors);
         }
-        return () => {
-            // Reset or keep? Maybe keep for continuity
-        };
     }, [character, setTheme]);
 
     if (!character) return <div>PILOT NOT FOUND</div>;
+
+    // Construct HSL string for graph
+    const primaryHsl = `hsl(${character.colors.hue}, ${character.colors.sat}, ${character.colors.light})`;
 
     return (
         <div style={{ width: '90vw', height: '80vh', display: 'flex', gap: '40px', alignItems: 'center' }}>
@@ -32,7 +33,8 @@ const CharacterDetail = ({ setTheme }) => {
                     fontFamily: 'var(--font-display)',
                     color: 'var(--theme-primary)',
                     lineHeight: 1,
-                    marginBottom: '10px'
+                    marginBottom: '10px',
+                    textShadow: '0 0 20px var(--theme-primary)'
                 }}>
                     {character.name.split(' ')[0]}
                 </h1>
@@ -49,14 +51,14 @@ const CharacterDetail = ({ setTheme }) => {
 
                 <button
                     onClick={() => navigate('/characters')}
+                    className="nerv-border"
                     style={{
                         marginTop: '30px',
-                        background: 'transparent',
-                        border: '1px solid var(--theme-primary)',
                         color: 'var(--theme-primary)',
                         padding: '10px 30px',
                         fontFamily: 'var(--font-display)',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        fontSize: '1.2rem'
                     }}
                 >
                     [ RETURN ]
@@ -71,11 +73,14 @@ const CharacterDetail = ({ setTheme }) => {
                     width: '400px',
                     height: '400px',
                     borderRadius: '50%',
-                    border: '20px solid rgba(255,255,255,0.05)',
+                    border: '1px solid var(--theme-primary)',
+                    boxShadow: '0 0 30px var(--theme-primary)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    position: 'relative'
+                    position: 'relative',
+                    overflow: 'hidden',
+                    backgroundColor: 'rgba(0,0,0,0.5)'
                 }}
             >
                 <div style={{
@@ -86,17 +91,19 @@ const CharacterDetail = ({ setTheme }) => {
                     borderRadius: '50%',
                     animation: 'spin 20s linear infinite'
                 }}></div>
+
+                {/* Real-time Graph */}
+                <div style={{ width: '100%', height: '150px', zIndex: 0 }}>
+                    <SynchroGraph color={primaryHsl} />
+                </div>
+
                 <div style={{
-                    width: '80%',
-                    height: '80%',
-                    backgroundColor: character.colors.background,
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    position: 'absolute',
+                    bottom: '80px',
                     color: 'var(--theme-primary)',
                     fontFamily: 'var(--font-display)',
-                    fontSize: '2rem'
+                    fontSize: '1.5rem',
+                    textShadow: '0 0 10px black'
                 }}>
                     SYNC: {character.stats.syncRate}%
                 </div>
@@ -108,14 +115,14 @@ const CharacterDetail = ({ setTheme }) => {
                 animate={{ x: 0, opacity: 1 }}
                 style={{ flex: 1, textAlign: 'left' }}
             >
-                <div className="nerv-border" style={{ padding: '30px', backgroundColor: 'rgba(0,0,0,0.8)' }}>
+                <div className="nerv-border" style={{ padding: '30px' }}>
                     <h3 style={{ color: 'var(--theme-secondary)', borderBottom: '1px solid var(--theme-secondary)', paddingBottom: '10px' }}>
                     // PERSONAL DATA
                     </h3>
-                    <p style={{ lineHeight: '1.8', fontSize: '1.1rem', marginTop: '20px' }}>
+                    <p style={{ lineHeight: '1.8', fontSize: '1.1rem', marginTop: '20px', color: '#ddd' }}>
                         {character.bio}
                     </p>
-                    <div style={{ marginTop: '30px', color: 'var(--theme-accent)' }}>
+                    <div style={{ marginTop: '30px', color: 'var(--theme-accent)', fontWeight: 'bold' }}>
                         STATUS: {character.status}
                     </div>
                 </div>

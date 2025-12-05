@@ -4,10 +4,13 @@ export const CHARACTERS = {
         name: 'SHINJI IKARI',
         evangelion: 'EVA-01 TEST TYPE',
         colors: {
-            primary: '#8D56BA', // Purple
-            secondary: '#39ff14', // Green
-            accent: '#ffffff',
-            background: 'rgba(57, 13, 84, 0.1)'
+            hue: 273,
+            sat: '44%',
+            light: '53%',
+            secHue: 110,
+            secSat: '100%',
+            secLight: '54%',
+            background: 'rgba(57, 13, 84, 0.2)'
         },
         stats: {
             syncRate: 400.0,
@@ -22,10 +25,13 @@ export const CHARACTERS = {
         name: 'ASUKA LANGLEY SORYU',
         evangelion: 'EVA-02 PRODUCTION MODEL',
         colors: {
-            primary: '#e60000', // Red
-            secondary: '#ff9d00', // Orange
-            accent: '#ffcc00',
-            background: 'rgba(100, 0, 0, 0.1)'
+            hue: 0,
+            sat: '100%',
+            light: '45%',
+            secHue: 37,
+            secSat: '100%',
+            secLight: '50%',
+            background: 'rgba(100, 0, 0, 0.2)'
         },
         stats: {
             syncRate: 98.5,
@@ -40,10 +46,13 @@ export const CHARACTERS = {
         name: 'REI AYANAMI',
         evangelion: 'EVA-00 PROTOTYPE',
         colors: {
-            primary: '#4DEEEA', // Cyan/Blue
-            secondary: '#F0F0F0', // White/Grey
-            accent: '#000000',
-            background: 'rgba(200, 200, 200, 0.05)'
+            hue: 178,
+            sat: '83%',
+            light: '62%',
+            secHue: 0,
+            secSat: '0%',
+            secLight: '94%',
+            background: 'rgba(0, 100, 100, 0.1)'
         },
         stats: {
             syncRate: 65.0,
@@ -56,7 +65,13 @@ export const CHARACTERS = {
 };
 
 export const DEFAULT_THEME = {
-    primary: '#ff9d00', // NERV Orange
-    secondary: '#e60000', // NERV Red
-    accent: '#39ff14' // NERV Green
+    hue: 37,
+    sat: '100%',
+    light: '50%',
+    secHue: 0,
+    secSat: '100%',
+    secLight: '45%',
+    accHue: 110,
+    accSat: '100%',
+    accLight: '54%'
 };

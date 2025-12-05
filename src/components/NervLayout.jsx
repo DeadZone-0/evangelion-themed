@@ -5,10 +5,19 @@ const NervLayout = ({ children, theme }) => {
     // Update CSS variables when theme changes
     useEffect(() => {
         if (theme) {
-            document.documentElement.style.setProperty('--theme-primary', theme.primary || '#ff9d00');
-            document.documentElement.style.setProperty('--theme-secondary', theme.secondary || '#e60000');
-            document.documentElement.style.setProperty('--theme-accent', theme.accent || '#39ff14');
-            document.documentElement.style.setProperty('--grid-color', theme.primary ? `${theme.primary}20` : 'rgba(255, 157, 0, 0.15)');
+            const root = document.documentElement;
+            root.style.setProperty('--theme-hue', theme.hue);
+            root.style.setProperty('--theme-sat', theme.sat);
+            root.style.setProperty('--theme-light', theme.light);
+
+            if (theme.secHue !== undefined) {
+                root.style.setProperty('--theme-sec-hue', theme.secHue);
+                root.style.setProperty('--theme-sec-sat', theme.secSat);
+                root.style.setProperty('--theme-sec-light', theme.secLight);
+            }
+
+            // Dynamic grid color using HSL with low opacity
+            root.style.setProperty('--grid-color', `hsla(${theme.hue}, ${theme.sat}, ${theme.light}, 0.15)`);
         }
     }, [theme]);
 
