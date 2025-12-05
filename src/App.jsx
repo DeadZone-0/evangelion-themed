@@ -6,6 +6,7 @@ import HexagonMenu from './components/HexagonMenu';
 import BootSequence from './components/BootSequence';
 import CharacterSelect from './pages/CharacterSelect';
 import CharacterDetail from './pages/CharacterDetail';
+import MagiSystem from './components/MagiSystem';
 import { DEFAULT_THEME } from './data/characters';
 
 // Home Component to keep the landing page logic separate
@@ -53,6 +54,9 @@ function AppContent() {
     } else if (item === 'CHARACTERS') {
       setCurrentTheme(DEFAULT_THEME);
       navigate('/characters');
+    } else if (item === 'ARCHIVE') {
+      setCurrentTheme(DEFAULT_THEME);
+      navigate('/archive');
     }
     // Add other routes as needed
   };
@@ -75,6 +79,7 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/characters" element={<CharacterSelect />} />
         <Route path="/character/:id" element={<CharacterDetail setTheme={setCurrentTheme} />} />
+        <Route path="/archive" element={<MagiSystem />} />
       </Routes>
     </NervLayout>
   )
